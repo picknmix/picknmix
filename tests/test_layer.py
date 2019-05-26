@@ -13,6 +13,7 @@ class TestLayer(object):
         layer_model = Layer([None],[LinearRegression()])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.dot(X, np.array([1, 2])) + 3
+        # X and y are linearly related, predictions will be almost perfect
         result = layer_model.fit(X, y)
         assert result.shape == (4,1)
         assert np.allclose(result.flatten(), y)
@@ -21,6 +22,7 @@ class TestLayer(object):
         layer_model = Layer([MinMaxScaler()],[LinearRegression()])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.dot(X, np.array([1, 2])) + 3
+        # X and y are linearly related, predictions will be almost perfect
         result = layer_model.fit(X, y)
         assert result.shape == (4,1)
         assert np.allclose(result.flatten(), y)
@@ -30,6 +32,7 @@ class TestLayer(object):
                             [LinearRegression(), LinearRegression()])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.dot(X, np.array([1, 2])) + 3
+        # X and y are linearly related, predictions will be almost perfect
         result = layer_model.fit(X, y)
         assert result.shape == (4,2)
         assert np.allclose(result[:,0], y)
