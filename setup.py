@@ -51,5 +51,7 @@ setup(
     tests_require=test_requirements,
     url='https://github.com/Cheukting/picknmix',
     version='0.1.0',
+    python_requires=">=3.5",
+    install_requires=['scikit-learn>=0.21.2'],
     zip_safe=False,
 )
