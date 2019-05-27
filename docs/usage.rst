@@ -2,9 +2,11 @@
 Usage
 =====
 
-To use Pick n Mix in a project::
+Use Pick n Mix to create a regression model::
 
     from picknmix.picknmix import Layer, Stack
+
+    import numpy as np
     from sklearn.linear_model import LinearRegression
     from sklearn.linear_model import Ridge
 
@@ -17,7 +19,7 @@ To use Pick n Mix in a project::
     model.fit(X, y)
     model.predict(np.array([[3, 5]]))
 
-You can also use preprocessing by::
+You can also use preprocessing in a Layer::
 
     from sklearn.linear_model import MinMaxScaler
 
