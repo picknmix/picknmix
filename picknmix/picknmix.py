@@ -10,7 +10,7 @@ import numpy as np
 class Layer:
     def __init__(self, models, preprocessors=None, proba=False):
         """Initialize Layer, create a parallel combination of Sci-Kit learn models
-        with preprocessors,
+        with or without preprocessors
 
         Parameters
         ==========
@@ -21,10 +21,6 @@ class Layer:
         proba : bool or a list of bool to show if predict_proba should be use instaed of predict,
                 useful for classifiers not in the final Layer. If is a list,
                 the length must match the number models.
-
-        Returns
-        =======
-        None
         """
         if preprocessors is not None:
             assert len(preprocessors) == len(models), \
@@ -34,7 +30,7 @@ class Layer:
             assert len(proba) == len(models), \
              f"Length of proba and number of models does not match, got {len(proba)} processors but {len(models)} models."
 
-        self.width = len(models) #number of models
+        self.width = len(models) # number of models
 
         if preprocessors is None:
             self.preprocessors = [None] * self.width
@@ -117,3 +113,55 @@ class Layer:
             else:
                 result = np.concatenate((result, temp_result), axis=1)
         return result
+
+
+class Stack:
+    def __init__(self, layers):
+        """Initialize Stack, create a vertical stacking of Layers
+
+        Parameters
+        ==========
+        layers : a list of Layers
+        """
+        self.depth = len(layers) # number of layers
+        self.layers = deepcopy(layers)
+
+    def fit(self, X, y):
+        """Fit Layers with (X, y) and return the fitted Stack
+
+        Parameters
+        ==========
+        X : array-like or sparse matrix, shape (n_samples, n_features)
+            Training data
+        y : array_like, shape (n_samples, n_targets)
+            Target values.
+
+        Returns
+        =======
+        self : obejct, the fitted Stack itself
+        """
+        X_new = X
+        for idx in range(self.depth):
+            X_new = self.layers[idx].fit(X_new, y)
+        return self # follow convention of Sci-Kit learn and return self
+
+    def predict(self, X):
+        """With given X, predict the result with the Stack
+
+        Parameters
+        ==========
+        X : array-like or sparse matrix, shape (n_samples, n_features)
+            Samples.
+
+        Returns
+        =======
+        C : array, shape (n_samples,)
+            Returns predicted values from the Stack.
+        """
+        X_new = X
+        for idx in range(self.depth):
+            X_new = self.layers[idx].predict(X_new)
+        # flatten result if only a number for each X
+        if X_new.shape[1] == 1:
+            X_new = X_new.flatten()
+        return X_new # this is the final result

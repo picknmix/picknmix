@@ -35,7 +35,6 @@ class TestLayer(object):
                             proba=True)
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 0])
-        # X and y are linearly related, predictions will be almost perfect
         result = layer_model.fit(X, y)
         assert result.shape == (4,2)
 
@@ -45,7 +44,7 @@ class TestLayer(object):
                             proba=True)
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 2])
-        # X and y are linearly related, predictions will be almost perfect
+
         result = layer_model.fit(X, y)
         assert result.shape == (4,3)
 
@@ -66,7 +65,6 @@ class TestLayer(object):
                             proba=[True,False])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 0])
-        # X and y are linearly related, predictions will be almost perfect
         result = layer_model.fit(X, y)
         assert result.shape == (4,3)
 
@@ -94,7 +92,7 @@ class TestLayer(object):
                             proba=True)
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 0])
-        # X and y are linearly related, predictions will be almost perfect
+
         layer_model.fit(X, y)
         result = layer_model.predict(np.array([[3, 5]]))
         assert result.shape == (1,2)
@@ -105,7 +103,6 @@ class TestLayer(object):
                             proba=True)
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 2])
-        # X and y are linearly related, predictions will be almost perfect
         layer_model.fit(X, y)
         result = layer_model.predict(np.array([[3, 5]]))
         assert result.shape == (1,3)
@@ -126,7 +123,6 @@ class TestLayer(object):
                             proba=[True,False])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.array([1, 1, 0, 0])
-        # X and y are linearly related, predictions will be almost perfect
         layer_model.fit(X, y)
         result = layer_model.predict(np.array([[3, 5], [2, 5]]))
         assert result.shape == (2,3)
