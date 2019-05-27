@@ -24,11 +24,11 @@ class Layer:
         """
         if preprocessors is not None:
             assert len(preprocessors) == len(models), \
-             f"Number of preprocessors and models does not match, got {len(preprocessors)} processors but {len(models)} models."
+             "Number of preprocessors and models does not match, got {} processors but {} models.".format(len(preprocessors),len(models))
 
         if type(proba) != bool:
             assert len(proba) == len(models), \
-             f"Length of proba and number of models does not match, got {len(proba)} processors but {len(models)} models."
+             "Length of proba and number of models does not match, got {} processors but {} models.".format(len(proba),len(models))
 
         self.width = len(models) # number of models
 
