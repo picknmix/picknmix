@@ -26,7 +26,7 @@ A simple tool to help building stacking models.
 Features
 --------
 
-Pick N Mix is a simple stacking tool for stacking Sci-Kit learn models of your picks.
+Pick n Mix is a simple stacking tool for stacking Sci-Kit learn models of your picks.
 It provided 2 classes: Layer and Stack. Layer is a parallel combination of models,
 while Stack combine Layers to create a stacking model.
 
