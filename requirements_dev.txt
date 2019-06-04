@@ -10,3 +10,5 @@ twine==1.13.0
 
 pytest==4.6.2
 pytest-runner==5.1
+
+scikit-learn==0.21.2
