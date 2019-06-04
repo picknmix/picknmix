@@ -6,3 +6,9 @@ History
 ------------------
 
 * First release on PyPI.
+
+0.1.1 (2019-04-06)
+------------------
+
+* Refactor import structure.
+* Adding checks on using 'proba' and fallback to 'predict' if needed.

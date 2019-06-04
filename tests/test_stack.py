@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
-from picknmix.picknmix import Layer, Stack
+from picknmix import Layer, Stack
 
 layer_width2_reg = Layer([LinearRegression(), LinearRegression()],
                          preprocessors = [None, MinMaxScaler()])
