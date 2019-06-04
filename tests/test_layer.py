@@ -126,3 +126,15 @@ class TestLayer(object):
         layer_model.fit(X, y)
         result = layer_model.predict(np.array([[3, 5], [2, 5]]))
         assert result.shape == (2,3)
+
+    def test_using_proba_without_predict_proba_method(self):
+        with pytest.warns(Warning) as record:
+            layer_model = Layer([LinearRegression()],
+                                proba=True)
+            X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+            y = np.dot(X, np.array([1, 2])) + 3
+            layer_model.fit(X, y)
+            result = layer_model.predict(np.array([[3, 5],[3, 5]]))
+            assert result.shape == (2,1)
+            assert np.allclose(result, np.array([[16],[16]]))
+            assert record
