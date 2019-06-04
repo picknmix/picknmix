@@ -6,6 +6,7 @@ while Stack combine Layers to create a stacking model"""
 
 from copy import deepcopy
 import numpy as np
+import warnings
 
 class Layer:
     def __init__(self, models, preprocessors=None, proba=False):
@@ -70,7 +71,12 @@ class Layer:
             self.models[idx].fit(X_new,y)
 
             if self.proba[idx]:
-                temp_result = self.models[idx].predict_proba(X_new)
+                if _method_checker(self.models[idx],'predict_proba'):
+                    temp_result = self.models[idx].predict_proba(X_new)
+                else:
+                    warnings.warn("Warning: predict_proba not exist for {}, using predict instead".format(self.models[idx].__class__))
+                    temp_result = self.models[idx].predict(X_new)
+                    temp_result = np.expand_dims(temp_result, axis=1)
             else:
                 temp_result = self.models[idx].predict(X_new)
                 temp_result = np.expand_dims(temp_result, axis=1)
@@ -103,7 +109,12 @@ class Layer:
                 X_new = X
 
             if self.proba[idx]:
-                temp_result = self.models[idx].predict_proba(X_new)
+                if _method_checker(self.models[idx],'predict_proba'):
+                    temp_result = self.models[idx].predict_proba(X_new)
+                else:
+                    warnings.warn("Warning: predict_proba not exist for {}, using predict instead".format(self.models[idx].__class__))
+                    temp_result = self.models[idx].predict(X_new)
+                    temp_result = np.expand_dims(temp_result, axis=1)
             else:
                 temp_result = self.models[idx].predict(X_new)
                 temp_result = np.expand_dims(temp_result, axis=1)
@@ -165,3 +176,6 @@ class Stack:
         if X_new.shape[1] == 1:
             X_new = X_new.flatten()
         return X_new # this is the final result
+
+def _method_checker(obj,method_name):
+    return method_name in dir(obj)
