@@ -4,7 +4,7 @@ Usage
 
 Use Pick n Mix to create a regression model::
 
-    from picknmix.picknmix import Layer, Stack
+    from picknmix import Layer, Stack
 
     import numpy as np
     from sklearn.linear_model import LinearRegression

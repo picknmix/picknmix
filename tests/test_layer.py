@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
-from picknmix.picknmix import Layer
+from picknmix import Layer
 
 class TestLayer(object):
     def test_different_numbers_of_preprocessor_and_models(self):
