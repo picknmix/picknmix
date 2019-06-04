@@ -14,4 +14,4 @@ You will be credited on the contribution page, the readme page and the front pag
 
 ### How to enter
 
-Send a pull request to the 'logo_competition' branch with your logo stored in the 'logo' directory
+Send a pull request to the 'logo_competition' branch with your logo stored in the 'logo' directory. File in '.svg' format is preferred.
