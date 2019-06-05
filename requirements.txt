@@ -31,7 +31,7 @@ packaging==19.0
 pathtools==0.1.2
 -e git+https://github.com/Cheukting/picknmix.git@6d28ebdfdca1a1221df7d21ad451c3ec99682274#egg=picknmix
 pkginfo==1.5.0.1
-pluggy==0.11.0
+pluggy==0.12.0
 poyo==0.4.2
 py==1.8.0
 pycodestyle==2.5.0
