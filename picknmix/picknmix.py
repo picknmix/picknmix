@@ -8,6 +8,8 @@ from copy import deepcopy
 import numpy as np
 import warnings
 
+
+
 class Layer:
     def __init__(self, models, preprocessors=None, proba=False):
         """Initialize Layer, create a parallel combination of Sci-Kit learn models
@@ -127,15 +129,36 @@ class Layer:
 
 
 class Stack:
-    def __init__(self, layers):
+    def __init__(self, layers, folds=None):
         """Initialize Stack, create a vertical stacking of Layers
 
         Parameters
         ==========
         layers : a list of Layers
+        k_fold: KFold, GroupKFold, StratifiedKFold or TimeSeriesSplit
+                cross-validator
         """
         self.depth = len(layers) # number of layers
         self.layers = deepcopy(layers)
+        self.use_folds = False
+        self.folds = None
+        self.splitter = None
+
+        if folds is not None:
+            if _check_custom_folds(folds):
+                self.use_folds = True
+                self.folds = folds
+                if len(folds) != self.depth:
+                    raise AssertionError("There are {} folds but {} layers".format(len(folds), self.depth))
+            elif _method_checker(folds, 'get_n_splits') and _method_checker(folds, 'split'):
+                self.use_folds = True
+                self.splitter = folds
+                if self.splitter.get_n_splits() != self.depth:
+                    warnings.warn("Warning: Number of fold is not the same as number of layers, using the number of layers as number of flods")
+                    self.splitter.n_splits = self.depth
+            else:
+                raise AssertionError("{} is not a valid input".format(folds))
+
 
     def fit(self, X, y):
         """Fit Layers with (X, y) and return the fitted Stack
@@ -151,9 +174,20 @@ class Stack:
         =======
         self : obejct, the fitted Stack itself
         """
-        X_new = X
+        if self.use_folds and self.folds is None:
+            self.folds = [fold_idx for _, fold_idx in self.splitter.split(X)]
+            X_new = X[fold_idx[0]]
+        else:
+            X_new = X
         for idx in range(self.depth):
-            X_new = self.layers[idx].fit(X_new, y)
+            if self.folds is not None:
+                # fit with the
+                self.layers[idx].fit(X_new, y)
+                _ , fold_idx = self.folds.split(X)
+                X_new = X[fold_idx]
+                X_new = self.layers[idx].predict(X_new)
+            else:
+                X_new = self.layers[idx].fit(X_new, y)
         return self # follow convention of Sci-Kit learn and return self
 
     def predict(self, X):
@@ -179,3 +213,9 @@ class Stack:
 
 def _method_checker(obj,method_name):
     return method_name in dir(obj)
+
+def _check_custom_folds(obj):
+    try:
+        return isinstance(obj[0][0], int)
+    except TypeError:
+        return False
