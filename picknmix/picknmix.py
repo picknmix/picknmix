@@ -127,15 +127,37 @@ class Layer:
 
 
 class Stack:
-    def __init__(self, layers):
+    def __init__(self, layers, folds=None):
         """Initialize Stack, create a vertical stacking of Layers
 
         Parameters
         ==========
         layers : a list of Layers
+        folds: it could be either KFold, GroupKFold, StratifiedKFold
+               or TimeSeriesSplit cross-validator from sci-kit learn;
+               or a custom list of sets of index for different folds.
+               If None (default) all data will be used in training all layers.
         """
         self.depth = len(layers) # number of layers
         self.layers = deepcopy(layers)
+        self.use_folds = False
+        self.folds = None
+        self.splitter = None
+
+        if folds is not None:
+            if _check_custom_folds(folds):
+                self.use_folds = True
+                self.folds = folds
+                if len(folds) != self.depth:
+                    raise AssertionError("There are {} folds but {} layers".format(len(folds), self.depth))
+            elif _method_checker(folds, 'get_n_splits') and _method_checker(folds, 'split'):
+                self.use_folds = True
+                self.splitter = folds
+                if self.splitter.get_n_splits() != self.depth:
+                    warnings.warn("Warning: Number of fold is not the same as number of layers, using the number of layers as number of flods")
+                    self.splitter.n_splits = self.depth
+            else:
+                raise AssertionError("{} is not a valid input".format(folds))
 
     def fit(self, X, y):
         """Fit Layers with (X, y) and return the fitted Stack
@@ -151,9 +173,25 @@ class Stack:
         =======
         self : obejct, the fitted Stack itself
         """
-        X_new = X
+        if self.use_folds:
+            if self.folds is None:
+                _, self.folds = self.splitter.split(X)
+            X_new = X[self.folds[0]]
+            y_new = y[self.folds[0]]
+        else:
+            X_new = X
+
         for idx in range(self.depth):
-            X_new = self.layers[idx].fit(X_new, y)
+            if self.use_folds:
+                for pre_idx in range(idx):
+                    X_new = self.layers[pre_idx].predict(X_new)
+                self.layers[idx].fit(X_new, y_new)
+
+                if idx < self.depth - 1:
+                    X_new = X[self.folds[idx+1]]
+                    y_new = y[self.folds[idx+1]]
+            else:
+                X_new = self.layers[idx].fit(X_new, y)
         return self # follow convention of Sci-Kit learn and return self
 
     def predict(self, X):
@@ -179,3 +217,9 @@ class Stack:
 
 def _method_checker(obj,method_name):
     return method_name in dir(obj)
+
+def _check_custom_folds(obj):
+    try:
+        return isinstance(obj[0][0], int)
+    except TypeError:
+        return False
