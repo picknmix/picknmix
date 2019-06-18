@@ -8,8 +8,6 @@ from copy import deepcopy
 import numpy as np
 import warnings
 
-
-
 class Layer:
     def __init__(self, models, preprocessors=None, proba=False):
         """Initialize Layer, create a parallel combination of Sci-Kit learn models
@@ -135,8 +133,10 @@ class Stack:
         Parameters
         ==========
         layers : a list of Layers
-        k_fold: KFold, GroupKFold, StratifiedKFold or TimeSeriesSplit
-                cross-validator
+        folds: it could be either KFold, GroupKFold, StratifiedKFold
+               or TimeSeriesSplit cross-validator from sci-kit learn;
+               or a custom list of sets of index for different folds.
+               If None (default) all data will be used in training all layers.
         """
         self.depth = len(layers) # number of layers
         self.layers = deepcopy(layers)
@@ -159,7 +159,6 @@ class Stack:
             else:
                 raise AssertionError("{} is not a valid input".format(folds))
 
-
     def fit(self, X, y):
         """Fit Layers with (X, y) and return the fitted Stack
 
@@ -174,18 +173,23 @@ class Stack:
         =======
         self : obejct, the fitted Stack itself
         """
-        if self.use_folds and self.folds is None:
-            self.folds = [fold_idx for _, fold_idx in self.splitter.split(X)]
-            X_new = X[fold_idx[0]]
+        if self.use_folds:
+            if self.folds is None:
+                _, self.folds = self.splitter.split(X)
+            X_new = X[self.folds[0]]
+            y_new = y[self.folds[0]]
         else:
             X_new = X
+
         for idx in range(self.depth):
-            if self.folds is not None:
-                # fit with the
-                self.layers[idx].fit(X_new, y)
-                _ , fold_idx = self.folds.split(X)
-                X_new = X[fold_idx]
-                X_new = self.layers[idx].predict(X_new)
+            if self.use_folds:
+                for pre_idx in range(idx):
+                    X_new = self.layers[pre_idx].predict(X_new)
+                self.layers[idx].fit(X_new, y_new)
+
+                if idx < self.depth - 1:
+                    X_new = X[self.folds[idx+1]]
+                    y_new = y[self.folds[idx+1]]
             else:
                 X_new = self.layers[idx].fit(X_new, y)
         return self # follow convention of Sci-Kit learn and return self
