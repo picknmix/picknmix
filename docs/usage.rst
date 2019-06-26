@@ -34,10 +34,30 @@ Classification task can also be done::
     first_layer = Layer([LogisticRegression(solver='liblinear'),
                          RandomForestClassifier()],
                          proba=True)
-    second_layer = Layer([LogisticRegression(solver='liblinear'])
+    second_layer = Layer([LogisticRegression(solver='liblinear')])
     model = Stack([first_layer, second_layer])
 
     X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
     y = np.array([1, 1, 0, 0])
     model.fit(X, y)
     model.predict(np.array([[1, 3]]))
+
+You can also make use of cross-validation with one of the different scikit-learn options (e.g. Stratified K-Fold)::
+    from sklearn import datasets
+    from sklearn.model_selection import StratifiedKFold
+
+    digits = datasets.load_digits()
+    features = digits.images
+    features = features.reshape(features.shape[0],
+                                features.shape[1]*features.shape[2])
+    targets = digits.target
+    skf = StratifiedKFold(n_splits=2)
+    skf.get_n_splits(features, targets)
+
+    first_layer = Layer([LogisticRegression(solver='liblinear'),
+                         RandomForestClassifier()],
+                         proba=True)
+    second_layer = Layer([LogisticRegression(solver='liblinear')])
+    model = Stack([first_layer, second_layer], folds=skf)
+
+    model.fit(features, targets)
