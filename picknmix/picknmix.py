@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-"""Pick n Mix is a simple stacking tool for stacking Sci-Kit learn models of your picks.
-It provided 2 classes: Layer and Stack. Layer is a parallel combination of models,
+"""Pick n Mix is a simple stacking tool for stacking Sci-Kit learn models
+of your picks.
+It provided 2 classes:
+Layer and Stack. Layer is a parallel combination of models,
 while Stack combine Layers to create a stacking model"""
 
 from copy import deepcopy
 import numpy as np
 import warnings
+
 
 class Layer:
     def __init__(self, models, preprocessors=None, proba=False):
@@ -15,23 +18,28 @@ class Layer:
 
         Parameters
         ==========
-        preprocessors : a list of picks from sklearn.preprocessing,
-                        if not None, the number of preprocessors and models must match.
-                        If not using preprocessing for a model, None need to be put in place
-        models : a list of picks from sklearn models
-        proba : bool or a list of bool to show if predict_proba should be use instaed of predict,
-                useful for classifiers not in the final Layer. If is a list,
-                the length must match the number models.
+        preprocessors:
+            A list of picks from sklearn.preprocessing, if not none.
+            the number of preprocessors and models must match.
+            If preprocessing not used for a model, None need to be in place.
+        models:
+            A list of picks from sklearn models
+        proba:
+            Bool or a list of bool to show if predict_proba should be use
+            instaed of predict, useful for classifiers not in the final Layer.
+            If is a list,the length must match the number models.
         """
         if preprocessors is not None:
-            assert len(preprocessors) == len(models), \
-             "Number of preprocessors and models does not match, got {} processors but {} models.".format(len(preprocessors),len(models))
+            assert len(preprocessors) == len(models), """Number of
+             preprocessors and models does not match, got {} processors but
+             {} models.""".format(len(preprocessors), len(models))
 
         if type(proba) != bool:
-            assert len(proba) == len(models), \
-             "Length of proba and number of models does not match, got {} processors but {} models.".format(len(proba),len(models))
+            assert len(proba) == len(models), """Length of proba and number of
+            models does not match, got {} processors but {} models.""".format(
+                len(proba), len(models))
 
-        self.width = len(models) # number of models
+        self.width = len(models)
 
         if preprocessors is None:
             self.preprocessors = [None] * self.width
@@ -46,8 +54,9 @@ class Layer:
             self.proba = deepcopy(proba)
 
     def fit(self, X, y):
-        """Fit each preprocessors and models in Layer with (X, y) and return
-        predictions in an array of shape (n_samples, n_models) for the next Layer
+        """Fit each preprocessors and models in Layer with (X, y) and
+        return predictions in an array of shape (n_samples, n_models) for
+        the next Layer
 
         Parameters
         ==========
@@ -68,13 +77,15 @@ class Layer:
             else:
                 X_new = X
 
-            self.models[idx].fit(X_new,y)
+            self.models[idx].fit(X_new, y)
 
             if self.proba[idx]:
-                if _method_checker(self.models[idx],'predict_proba'):
+                if _method_checker(self.models[idx], 'predict_proba'):
                     temp_result = self.models[idx].predict_proba(X_new)
                 else:
-                    warnings.warn("Warning: predict_proba not exist for {}, using predict instead".format(self.models[idx].__class__))
+                    warnings.warn("""Warning: predict_proba not exist for
+                        {}, using predict instead""".format(
+                            self.models[idx].__class__))
                     temp_result = self.models[idx].predict(X_new)
                     temp_result = np.expand_dims(temp_result, axis=1)
             else:
@@ -109,10 +120,12 @@ class Layer:
                 X_new = X
 
             if self.proba[idx]:
-                if _method_checker(self.models[idx],'predict_proba'):
+                if _method_checker(self.models[idx], 'predict_proba'):
                     temp_result = self.models[idx].predict_proba(X_new)
                 else:
-                    warnings.warn("Warning: predict_proba not exist for {}, using predict instead".format(self.models[idx].__class__))
+                    warnings.warn("""Warning: predict_proba not exist for {},
+                         using predict instead""".format(
+                            self.models[idx].__class__))
                     temp_result = self.models[idx].predict(X_new)
                     temp_result = np.expand_dims(temp_result, axis=1)
             else:
@@ -138,7 +151,7 @@ class Stack:
                or a custom list of sets of index for different folds.
                If None (default) all data will be used in training all layers.
         """
-        self.depth = len(layers) # number of layers
+        self.depth = len(layers)
         self.layers = deepcopy(layers)
         self.use_folds = False
         self.folds = None
@@ -149,12 +162,17 @@ class Stack:
                 self.use_folds = True
                 self.folds = folds
                 if len(folds) != self.depth:
-                    raise AssertionError("There are {} folds but {} layers".format(len(folds), self.depth))
-            elif _method_checker(folds, 'get_n_splits') and _method_checker(folds, 'split'):
+                    raise AssertionError(
+                        "There are {} folds but {} layers".format(
+                            len(folds), self.depth))
+            elif _method_checker(folds, 'get_n_splits') and _method_checker(
+                    folds, 'split'):
                 self.use_folds = True
                 self.splitter = folds
                 if self.splitter.get_n_splits() != self.depth:
-                    warnings.warn("Warning: Number of fold is not the same as number of layers, using the number of layers as number of flods")
+                    warnings.warn("""Warning: Number of fold is not the same
+                        as number of layers, using the number of layers as
+                        number of flods""")
                     self.splitter.n_splits = self.depth
             else:
                 raise AssertionError("{} is not a valid input".format(folds))
@@ -192,7 +210,7 @@ class Stack:
                     y_new = y[self.folds[idx+1]]
             else:
                 X_new = self.layers[idx].fit(X_new, y)
-        return self # follow convention of Sci-Kit learn and return self
+        return self
 
     def predict(self, X):
         """With given X, predict the result with the Stack
