@@ -126,3 +126,5 @@ $ git push
 $ git push --tags
 
 Travis will then deploy to PyPI if tests pass.
+
+**Once you have contributed, please remember to add your name in AUTHOR.rst under Contributors. Thanks so much for your contribution, it is really appreciated.**
