@@ -231,10 +231,12 @@ class Stack:
         # flatten result if only a number for each X
         if X_new.shape[1] == 1:
             X_new = X_new.flatten()
-        return X_new # this is the final result
+        return X_new
 
-def _method_checker(obj,method_name):
+
+def _method_checker(obj, method_name):
     return method_name in dir(obj)
+
 
 def _check_custom_folds(obj):
     try:
