@@ -85,7 +85,7 @@ class Layer:
                 else:
                     warnings.warn("""Warning: predict_proba not exist for
                         {}, using predict instead""".format(
-                            self.models[idx].__class__))
+                        self.models[idx].__class__))
                     temp_result = self.models[idx].predict(X_new)
                     temp_result = np.expand_dims(temp_result, axis=1)
             else:
@@ -125,7 +125,7 @@ class Layer:
                 else:
                     warnings.warn("""Warning: predict_proba not exist for {},
                          using predict instead""".format(
-                            self.models[idx].__class__))
+                        self.models[idx].__class__))
                     temp_result = self.models[idx].predict(X_new)
                     temp_result = np.expand_dims(temp_result, axis=1)
             else:
@@ -206,8 +206,8 @@ class Stack:
                 self.layers[idx].fit(X_new, y_new)
 
                 if idx < self.depth - 1:
-                    X_new = X[self.folds[idx+1]]
-                    y_new = y[self.folds[idx+1]]
+                    X_new = X[self.folds[idx + 1]]
+                    y_new = y[self.folds[idx + 1]]
             else:
                 X_new = self.layers[idx].fit(X_new, y)
         return self
