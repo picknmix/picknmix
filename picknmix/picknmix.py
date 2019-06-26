@@ -193,7 +193,7 @@ class Stack:
         """
         if self.use_folds:
             if self.folds is None:
-                _, self.folds = self.splitter.split(X)
+                _, self.folds = self.splitter.split(X, y)
             X_new = X[self.folds[0]]
             y_new = y[self.folds[0]]
         else:
