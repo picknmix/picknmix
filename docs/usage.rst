@@ -43,6 +43,7 @@ Classification task can also be done::
     model.predict(np.array([[1, 3]]))
 
 You can also make use of cross-validation with one of the different scikit-learn options (e.g. Stratified K-Fold)::
+
     from sklearn import datasets
     from sklearn.model_selection import StratifiedKFold
 
