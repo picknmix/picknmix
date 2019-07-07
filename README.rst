@@ -1,3 +1,5 @@
+.. image:: https://github.com/Cheukting/picknmix/raw/master/logo/picknmix_logo.png
+
 ==========
 Pick n Mix
 ==========
@@ -35,5 +37,8 @@ Credits
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
+Thanks Agathe_ for the logo.
+
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _Agathe: https://www.agathests.com/
