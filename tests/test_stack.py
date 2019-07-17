@@ -14,7 +14,7 @@ layer_width2_clf = Layer([LogisticRegression(solver='liblinear'),
 layer_width1_reg = Layer([LinearRegression()])
 layer_width1_clf = Layer([LogisticRegression(solver='liblinear')])
 
-class TestStack(object):
+class TestStack:
 
     def test_fit_predict_1_layer_reg(self):
         model = Stack([layer_width1_reg])
