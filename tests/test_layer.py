@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
 from picknmix import Layer
 
-class TestLayer(object):
+class TestLayer:
     def test_different_numbers_of_preprocessor_and_models(self):
         with pytest.raises(Exception):
             assert Layer([LinearRegression(), LinearRegression()],
