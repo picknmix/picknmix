@@ -80,7 +80,7 @@ Ready to contribute? Here's how to set up `picknmix` for local development.
    tests, including testing other Python versions with tox::
 
     $ flake8 picknmix tests
-    $ python setup.py test or py.test
+    $ python setup.py test or pytest
     $ tox
 
    To get flake8 and tox, just pip install them into your virtualenv.
@@ -111,7 +111,7 @@ Tips
 
 To run a subset of tests::
 
-$ py.test tests.test_picknmix
+$ pytest tests.test_picknmix
 
 
 Deploying
