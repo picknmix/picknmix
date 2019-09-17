@@ -14,3 +14,4 @@ Contributors
 * Elena Lestini <elena.lestini@gmail.com>
 * Antonius Schick <antonius.schick@outlook.com>
 * Hugo van Kemenade <https://github.com/hugovk>
+* Mani Sarkar <https://github.com/neomatrix369>
