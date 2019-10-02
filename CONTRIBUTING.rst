@@ -68,7 +68,8 @@ Ready to contribute? Here's how to set up `picknmix` for local development.
 
     $ mkvirtualenv picknmix
     $ cd picknmix/
-    $ python setup.py develop
+    $ pip install -e .
+    $ pip install -r requirements.txt
 
 4. Create a branch for local development::
 
