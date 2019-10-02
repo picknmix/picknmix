@@ -8,7 +8,7 @@ echo "Running tox..."
 tox
 
 echo "Running coverage..."
-pip install -r requirements-coverage.txt
+pip install -r requirements-dev.txt
 
 coverage run --source picknmix -m pytest
 coverage report -m
