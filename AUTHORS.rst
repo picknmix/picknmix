@@ -16,3 +16,4 @@ Contributors
 * Hugo van Kemenade <https://github.com/hugovk>
 * Mani Sarkar <https://github.com/neomatrix369>
 * Przemyslaw Pietras <https://github.com/destag>
+* Ignacio Pacheco <https://github.com/ipacheco-uy>
