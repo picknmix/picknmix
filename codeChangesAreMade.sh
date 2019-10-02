@@ -4,7 +4,7 @@ set -e
 set -u
 set -o pipefail
 
-git diff --name-only master                   \
+git diff --name-only HEAD                     \
      | perl -ne 'print $1 if m/\.([^.\/]+)$/' \
      | sort -u                                \
        > all-changed-files-extensions.txt
