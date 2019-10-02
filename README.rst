@@ -36,6 +36,72 @@ Pick n Mix is a simple stacking tool for stacking Sci-Kit learn models of your p
 It provided 2 classes: Layer and Stack. Layer is a parallel combination of models,
 while Stack combine Layers to create a stacking model.
 
+How to Install
+--------------
+
+Stable Release
+~~~~~~~~~~~~~~
+To install Pick n Mix, run this command in your terminal:
+
+::
+
+    $ pip install picknmix
+    
+This is the **preferred** method to install Pick n Mix, as it will always install the most recent **stable** release.
+
+If you don’t have `pip <https://pip.pypa.io/en/stable/>`_ installed, this `Python <http://docs.python-guide.org/en/latest/starting/installation/>`_ installation guide can guide you through the process.
+
+From sources
+~~~~~~~~~~~~
++ You can either clone the public repository:
+
+::
+
+    $ git clone git://github.com/Cheukting/picknmix
+
++ Or download the `tarball <https://github.com/Cheukting/picknmix/tarball/master>`_:      
+
+::
+
+    $ curl  -OL https://github.com/Cheukting/picknmix/tarball/master
+
++ Once you have a copy of the source, you can install it with:
+
+::
+
+    $ python setup.py install
+    
+Usage
+-----
+Use Pick n Mix to create a regression model:
+
+::
+
+    from picknmix import Layer, Stack
+
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.linear_model import Ridge
+
+    first_layer = Layer([LinearRegression(), Ridge()])
+    second_layer = Layer([LinearRegression()])
+    model = Stack([first_layer, second_layer])
+
+    X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+    y = np.dot(X, np.array([1, 2])) + 3
+    model.fit(X, y)
+    model.predict(np.array([[3, 5]]))
+    
+You can also use preprocessing in a Layer:
+
+::
+
+    from sklearn.linear_model import MinMaxScaler
+
+    first_layer = Layer([LinearRegression(), Ridge()],
+                        preprocessors = [MinMaxScaler(), None])
+                        
+For more examples for usage, please refer to the `documentation <https://picknmix.readthedocs.io>`_.
 
 Credits
 -------
