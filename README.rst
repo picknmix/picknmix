@@ -8,12 +8,16 @@ Pick n Mix
 .. image:: https://img.shields.io/pypi/v/picknmix.svg
         :target: https://pypi.python.org/pypi/picknmix
 
-.. image:: https://img.shields.io/travis/Cheukting/picknmix.svg
-        :target: https://travis-ci.org/Cheukting/picknmix
+.. image:: https://img.shields.io/travis/picknmix/picknmix.svg
+        :target: https://travis-ci.org/picknmix/picknmix
 
 .. image:: https://readthedocs.org/projects/picknmix/badge/?version=latest
         :target: https://picknmix.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
+
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+        :target: https://opensource.org/licenses/MIT
+        :alt: License badge
 
 
 
