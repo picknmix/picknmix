@@ -101,7 +101,7 @@ You can also use preprocessing in a Layer:
     first_layer = Layer([LinearRegression(), Ridge()],
                         preprocessors = [MinMaxScaler(), None])
                         
-For more examples for usage, please refer to the _`documentation < https://picknmix.readthedocs.io>`_.
+For more examples for usage, please refer to the `documentation <https://picknmix.readthedocs.io>`_.
 
 Credits
 -------
