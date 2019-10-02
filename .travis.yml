@@ -5,7 +5,7 @@ python:
 - 3.6
 - 3.5
 install: pip install -U tox-travis
-script: ./runOnCICD.sh
+script: [ "$(./codeChangesAreMade.sh)" = "true" ] && ./runOnCICD.sh || echo "We have not made code related changes in this PR/branch, hence exiting gracefully now. No TravisCI build will be triggered for this PR/branch."
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
