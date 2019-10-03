@@ -4,9 +4,10 @@ python:
 - 3.7
 - 3.6
 - 3.5
+before_install: export CODE_CHANGES="$(./codeChangesAreMade.sh)"
 install: pip install -U tox-travis
 script: | 
-  CODE_CHANGES="$(./codeChangesAreMade.sh)"
+  echo "CODE_CHANGES: ${CODE_CHANGES:-}"
   if [[ "${CODE_CHANGES}" = "true" ]]; then
      ./runOnCICD.sh; 
   else 
