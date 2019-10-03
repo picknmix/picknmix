@@ -36,6 +36,26 @@ Pick n Mix is a simple stacking tool for stacking Sci-Kit learn models of your p
 It provided 2 classes: Layer and Stack. Layer is a parallel combination of models,
 while Stack combine Layers to create a stacking model.
 
+Stacking
+----------------
+
+It's one technique to ensemble (combine) multiple models into one more effective model by increasing the predictive force of the classifier.
+The idea is to train several models, each with the same objective but with different features or architectures.
+
+Most of the errors from a model’s learning are from three main factors: variance, noise, and bias.
+By using ensemble methods, we’re able to increase the stability of the final model and reduce the errors mentioned
+previously.
+While they are individually not great, the main principle behind ensemble modeling is to group weak learners together to form one strong learner.
+
+.. image:: https://1.bp.blogspot.com/-S8ss-zVfpRM/V1qKcxfCvNI/AAAAAAAAD0I/8UUFyrE4MqQYYuWSxrOOvX3zRfw93nCLwCLcB/s1600/Stacking.png
+
+A stacking new model (meta learner) is trained from the combined predictions of two (or more) previous model.
+The predictions from the models are used as inputs for each sequential layer, and combined to form a new set of predictions.
+These can be used on additional layers, or the process can stop here with a final result.
+Constant adding more layers just don't lineally mean a better predictor.
+
+More info about stacking and ensemble models: https://en.wikipedia.org/wiki/Ensemble_learning
+
 How to Install
 --------------
 
@@ -46,7 +66,7 @@ To install Pick n Mix, run this command in your terminal:
 ::
 
     $ pip install picknmix
-    
+
 This is the **preferred** method to install Pick n Mix, as it will always install the most recent **stable** release.
 
 If you don’t have `pip <https://pip.pypa.io/en/stable/>`_ installed, this `Python <http://docs.python-guide.org/en/latest/starting/installation/>`_ installation guide can guide you through the process.
@@ -59,7 +79,7 @@ From sources
 
     $ git clone git://github.com/Cheukting/picknmix
 
-+ Or download the `tarball <https://github.com/Cheukting/picknmix/tarball/master>`_:      
++ Or download the `tarball <https://github.com/Cheukting/picknmix/tarball/master>`_:
 
 ::
 
@@ -70,7 +90,7 @@ From sources
 ::
 
     $ python setup.py install
-    
+
 Usage
 -----
 Use Pick n Mix to create a regression model:
@@ -91,7 +111,7 @@ Use Pick n Mix to create a regression model:
     y = np.dot(X, np.array([1, 2])) + 3
     model.fit(X, y)
     model.predict(np.array([[3, 5]]))
-    
+
 You can also use preprocessing in a Layer:
 
 ::
@@ -100,7 +120,7 @@ You can also use preprocessing in a Layer:
 
     first_layer = Layer([LinearRegression(), Ridge()],
                         preprocessors = [MinMaxScaler(), None])
-                        
+
 For more examples for usage, please refer to the `documentation <https://picknmix.readthedocs.io>`_.
 
 Credits
