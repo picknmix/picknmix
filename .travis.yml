@@ -11,6 +11,7 @@ script: |
      ./runOnCICD.sh; 
   else 
      echo "We have not made code related changes in this PR/branch, hence exiting gracefully now. No TravisCI build will be triggered for this PR/branch.";
+     exit 0;
   fi
 deploy:
   provider: pypi
