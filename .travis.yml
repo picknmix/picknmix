@@ -7,7 +7,7 @@ python:
 install: pip install -U tox-travis
 script: | 
   CODE_CHANGES="$(./codeChangesAreMade.sh)"
-  if [[ "${CODE_CHANGES}" == "true" ]]; then
+  if [[ "${CODE_CHANGES}" = "true" ]]; then
      ./runOnCICD.sh; 
   else 
      echo "We have not made code related changes in this PR/branch, hence exiting gracefully now. No TravisCI build will be triggered for this PR/branch.";
