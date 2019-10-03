@@ -5,9 +5,13 @@ python:
 - 3.6
 - 3.5
 install: pip install -U tox-travis
-env: CODE_CHANGES="$(./codeChangesAreMade.sh)"
-if: env(CODE_CHANGES) = true
-script: ./runOnCICD.sh
+script: | 
+  CODE_CHANGES="$(./codeChangesAreMade.sh)"
+  if [[ "${CODE_CHANGES}" == "true" ]]; then
+     ./runOnCICD.sh; 
+  else 
+     echo "We have not made code related changes in this PR/branch, hence exiting gracefully now. No TravisCI build will be triggered for this PR/branch.";
+  fi
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
