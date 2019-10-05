@@ -42,6 +42,20 @@ Pick n Mix could always use more documentation, whether as part of the
 official Pick n Mix docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
+Write Tests
+~~~~~~~~~~~~~~~~~~~
+
+Code should be accompanied by tests and documentation. You can add your tests to the tests folder.
+
+To create a new test::
+
+  class TestX:
+
+    def test_one_plus_one_eq_2(self):
+        assert 1+1 == 2
+
+Check existing test for more precise examples, also pytest info in https://docs.pytest.org.
+
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
@@ -51,6 +65,7 @@ If you are proposing a feature:
 
 * Explain in detail how it would work.
 * Keep the scope as narrow as possible, to make it easier to implement.
+* Check if it isn't previously reported.
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
@@ -106,6 +121,10 @@ Before you submit a pull request, check that it meets these guidelines:
 3. The pull request should work for Python 3.5+ and PyPy. Check
    https://travis-ci.org/Cheukting/picknmix/pull_requests
    and make sure that the tests pass for all supported Python versions.
+4. Use this title convention::
+  * [Doc] for documentation
+  * [BUG] for bug fix
+  * [WIP] for work in progress PR
 
 Tips
 ----
