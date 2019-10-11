@@ -47,6 +47,9 @@ class Layer:
             self.preprocessors = deepcopy(preprocessors)
 
         self.models = deepcopy(models)
+        
+        self.originalPreprocessors = deepcopy(preprocessors) # make sure it will remain the same even if the object is changed outside
+        self.originalModels = deepcopy(models)               # make sure it will remain the same even if the object is changed outside
 
         if type(proba) == bool:
             self.proba = [proba] * self.width
@@ -137,6 +140,14 @@ class Layer:
             else:
                 result = np.concatenate((result, temp_result), axis=1)
         return result
+
+    def copy(self):
+        """Copies the Layer's shape as it has not been trained before
+        Returns
+        =======
+        the copy of the model
+        """
+        return Layer(models=self.originalModels, preprocessors=self.originalPreprocessors)
 
 
 class Stack:
@@ -233,6 +244,11 @@ class Stack:
             X_new = X_new.flatten()
         return X_new
 
+    def copy(self):
+        retLayers = []
+        for idx in range(self.depth):
+            retLayers.append(self.layers[idx].copy())
+        return Stack(layers=retLayers)
 
 def _method_checker(obj, method_name):
     return method_name in dir(obj)
