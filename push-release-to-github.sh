@@ -11,15 +11,16 @@ if [[ -z "${GITHUB_TOKEN}" ]]; then
   exit -1
 fi
 
-TAG_NAME="${1:-}"
-if [[ -z "${TAG_NAME}" ]]; then
+RELEASE_VERSION="${1:-}"
+TAG_NAME="v${RELEASE_VERSION}"
+if [[ -z "${RELEASE_VERSION}" ]]; then
   echo ""
-  echo "Tag name is not specified, please pass it as a CLI arg"
-  echo "   $0 [tag name]"
-  echo "   for e.g. $0 v0.1"
+  echo "Release is not specified, please pass it as a CLI arg"
+  echo "   $0 [release version]"
+  echo "   for e.g. $0 0.1"
   echo ""
 
-  echo "Use git tag --list to find out available tags (tag names)"
+  echo "Use git tag --list to find out available tags (tag names) to get clues about release version"
   exit -1
 fi
 
