@@ -38,8 +38,7 @@ curl \
     -H "Accept: application/vnd.github.v3+json" \
     -X POST -d "${POST_DATA}" "https://api.github.com/repos/${TARGET_REPO}/releases"
 
-mkdir -p artifacts
-CURL_OUTPUT="./artifacts/github-release.listing"
+CURL_OUTPUT=".github-release.listing"
 echo "Getting Github ReleaseId"
 curl \
     -H "Authorization: token ${GITHUB_TOKEN}" \
@@ -52,7 +51,7 @@ echo "Release has been created ${RELEASE_ID} for tag ${TAG_NAME}"
 echo ""
 echo "Finished uploading to GitHub"
 echo ""
-echo "Checkout curl output at ${CURL_OUTPUT}"
+echo "Checkout curl output at ${CURL_OUTPUT}, in case of errors"
 echo ""
 echo "Use curl -O -L [github release url] to download an installable artifact."
 echo "    for e.g."
