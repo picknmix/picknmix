@@ -142,7 +142,7 @@ class TestLayer:
 
 
     def test_copy_function_only_model(self):
-        curLayer = Layer([LinearRegression(), Ridge()])
+        curLayer = Layer([LinearRegression(), LogisticRegression()])
         X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
         y = np.dot(X, np.array([1, 2])) + 3
         curLayer.fit(X, y)

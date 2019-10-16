@@ -99,7 +99,7 @@ class TestStack:
         assert np.allclose(result, np.array([16, 16]))
 
     def test_stack_copy_function_only_model(self):
-        first_layer = Layer([LinearRegression(), Ridge()])
+        first_layer = Layer([LinearRegression(), LogisticRegression()])
         second_layer = Layer([LinearRegression()])
         model = Stack([first_layer, second_layer])
 
@@ -116,7 +116,7 @@ class TestStack:
         assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"
 
     def test_stack_copy_function_model_and_preprocessor(self):
-        first_layer = Layer(models=[LogisticRegression(), Ridge()], preprocessors=[MinMaxScaler(), None])
+        first_layer = Layer(models=[LogisticRegression(), LinearRegression()], preprocessors=[MinMaxScaler(), None])
         second_layer = Layer([LinearRegression()], preprocessors=[MinMaxScaler()])
         model = Stack([first_layer, second_layer])
 
