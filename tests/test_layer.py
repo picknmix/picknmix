@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
+from sklearn.exceptions import NotFittedError
 from picknmix import Layer
 
 class TestLayer:
@@ -138,3 +139,32 @@ class TestLayer:
             assert result.shape == (2,1)
             assert np.allclose(result, np.array([[16],[16]]))
             assert record
+
+
+    def test_copy_function_only_model(self):
+        curLayer = Layer([LinearRegression(), Ridge()])
+        X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+        y = np.dot(X, np.array([1, 2])) + 3
+        curLayer.fit(X, y)
+        curLayer2 = curLayer.copy()
+        gotError = False
+        try:
+            curLayer2.predict([1, 2])
+        except(NotFittedError):
+            gotError = True
+        assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"
+
+    def test_copy_function_model_and_preprocessor(self):
+        curLayer = Layer(models=[LogisticRegression(), LinearRegression()], preprocessors=[MinMaxScaler(), None])
+
+        X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+        y = np.dot(X, np.array([1, 2])) + 3
+        curLayer.fit(X, y)
+        curLayer2 = curLayer.copy()
+        gotError = False
+        try:
+            curLayer2.predict([1,2])
+        except(NotFittedError):
+            gotError = True
+
+        assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"

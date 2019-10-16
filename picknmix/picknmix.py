@@ -9,6 +9,7 @@ while Stack combine Layers to create a stacking model"""
 from copy import deepcopy
 import numpy as np
 import warnings
+import sklearn
 
 
 class Layer:
@@ -47,9 +48,6 @@ class Layer:
             self.preprocessors = deepcopy(preprocessors)
 
         self.models = deepcopy(models)
-        
-        self.originalPreprocessors = deepcopy(preprocessors) # make sure it will remain the same even if the object is changed outside
-        self.originalModels = deepcopy(models)               # make sure it will remain the same even if the object is changed outside
 
         if type(proba) == bool:
             self.proba = [proba] * self.width
@@ -145,9 +143,18 @@ class Layer:
         """Copies the Layer's shape as it has not been trained before
         Returns
         =======
-        the copy of the model
+        the copy of the Layer
         """
-        return Layer(models=self.originalModels, preprocessors=self.originalPreprocessors)
+        copyPreprocessors = []
+        copyModels = []
+        for preprocessor in self.preprocessors:
+            copyPrep = sklearn.base.clone(preprocessor) if preprocessor is not None else None
+            copyPreprocessors.append(copyPrep)
+        for model in self.models:
+            copyModel = sklearn.base.clone(model)
+            copyModels.append(copyModel)
+        return Layer(models=copyModels, preprocessors=copyPreprocessors)
+
 
 
 class Stack:
@@ -245,10 +252,15 @@ class Stack:
         return X_new
 
     def copy(self):
-        retLayers = []
+        """Copies the Stack's shape as it has not been trained before
+        Returns
+        =======
+        the copy of the Stack
+        """
+        copyLayers = []
         for idx in range(self.depth):
-            retLayers.append(self.layers[idx].copy())
-        return Stack(layers=retLayers)
+            copyLayers.append(self.layers[idx].copy())
+        return Stack(layers=copyLayers)
 
 def _method_checker(obj, method_name):
     return method_name in dir(obj)
