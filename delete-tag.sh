@@ -64,6 +64,28 @@ printUsageAndExistIfNoTagNameIsSpecified() {
 	fi
 }
 
+checkIfRecentCommitIfFromBumpversion() {
+	RELEASE_VERSION="$(echo "${TAG_NAME}" | tr -d "v" || true)"
+	RECENT_COMMIT_MESSAGE="$(git log --oneline | grep -A 1 -B 1 " → ${RELEASE_VERSION}" || true)"
+	
+	BUMP_VERSION_COMMITS="$(echo "${RECENT_COMMIT_MESSAGE}" | grep -A 1 -B 1 "Bump version:" || true)"
+	if [[ ! -z "${BUMP_VERSION_COMMITS}" ]]; then
+       echo "~~~ Important to know"
+       echo "You have deleted the tags but the commit messages related to them still linger about."
+       echo ""
+       echo "Your most recent commit message related to ${TAG_NAME} still exists:"
+       echo "${BUMP_VERSION_COMMITS}"
+       echo ""; echo "Current HEAD: $(git rev-parse --short HEAD || true)"
+       echo ""; echo "Suggest using the below commands to remove commit message:"
+       echo "   git log                 ### list all the commits to examine them"
+       echo "   git rebase -i HEAD~10   ### and then interactively remove the bump version related commits"
+       echo ""; echo "   or "; echo ""
+       echo "   git log                 ### list all the commits to examine them"
+       echo "   git reset --hard [commit-sha] ### in case you can do this based on the git commit history"
+       echo "                ### [commit-sha] the safe commit point you want your HEAD to point to"
+	fi
+}
+
 fetchTags
 checkIfAnyTagsExistAtAll
 
@@ -74,3 +96,5 @@ exitIfTagNameDoesNotExist
 echo "${TAG_NAME} does exist, proceeding further..."
 deleteTag "local repo"  "git tag --delete ${TAG_NAME}"
 deleteTag "remote repo" "git push --delete origin ${TAG_NAME}"
+
+checkIfRecentCommitIfFromBumpversion

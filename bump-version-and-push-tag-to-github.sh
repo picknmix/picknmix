@@ -21,17 +21,17 @@ if [[ "${answer}" = "y" ]] || [[ "${answer}" = "yes" ]]; then
 	echo ""; echo "Bumping the version of library to next version"
 	bumpversion --verbose --list patch setup.py
    
-	echo ""; echo "New version of the library is $(grep "version" setup.py | tr -d " ," || true)"
+	echo ""; echo "~~~ New version of the library is $(grep "version" setup.py | tr -d " ," || true)"
 
 	CREATED_TAG_NAME="$(git tag --list | head -n 1)"
-	echo ""; echo "Tag created ${CREATED_TAG_NAME}"
+	echo ""; echo "~~~ Tag created ${CREATED_TAG_NAME}"
 
-	echo ""; echo "Recent commit: $(git log --oneline | head -n 1 || true)"
+	echo ""; echo "~~~ Recent commit: $(git log --oneline | head -n 1 || true)"
 
 	echo ""; echo "Pushing ${CREATED_TAG_NAME} tag to remote"
 	git push origin ${CREATED_TAG_NAME}	
 
-	echo ""; echo "You can delete the ${CREATED_TAG_NAME} tag from both your local and remote repos using the below command:"
+	echo ""; echo "(Optional info) You can delete the ${CREATED_TAG_NAME} tag from both your local and remote repos using the below command:"
 	echo "./delete-tag.sh ${CREATED_TAG_NAME}"
 else
 	echo ""; echo "You said 'no', and hence NOT bumping version of library (version stays unchanged)."
