@@ -68,7 +68,23 @@ showRecentCommitMessage() {
 	echo ""; echo "~~~ Recent commit: $(git log --oneline | head -n 1 || true)"
 }
 
+showCreatedTag() {
+	echo ""; echo "~~~ Tag created ${CREATED_TAG_NAME}"
+}
+
+pushTagToRemoteRepo() {
+	echo ""; echo "Pushing ${CREATED_TAG_NAME} tag to remote"
+	git push origin ${CREATED_TAG_NAME}
+}
+
+printOptionalInfo() {
+	echo ""; echo "(Optional info) You can delete the ${CREATED_TAG_NAME} tag from both your local and remote repos using the below command:"
+	echo "./delete-tag.sh ${CREATED_TAG_NAME}"
+}
+
+CREATED_TAG_NAME=""
 askAndBumpVersion() {
+	echo ""
 	read -p "Do you want to bump the version of your library ([Y|y]es/[N|n]o)? " answer
 	answer="$(echo "${answer}" | awk '{print tolower($0)}')"
 
@@ -78,15 +94,14 @@ askAndBumpVersion() {
 		showNewVersion
 
 		CREATED_TAG_NAME="v$(getCurrentVersion)"
-		echo ""; echo "~~~ Tag created ${CREATED_TAG_NAME}"
+		
+		showCreatedTag
 
 		showRecentCommitMessage
 
-		echo ""; echo "Pushing ${CREATED_TAG_NAME} tag to remote"
-		git push origin ${CREATED_TAG_NAME}
+		pushTagToRemoteRepo
 
-		echo ""; echo "(Optional info) You can delete the ${CREATED_TAG_NAME} tag from both your local and remote repos using the below command:"
-		echo "./delete-tag.sh ${CREATED_TAG_NAME}"
+		printOptionalInfo
 	else
 		echo ""; echo "You said 'no', and hence NOT bumping version of library (version stays unchanged)."
 	fi

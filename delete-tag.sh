@@ -64,19 +64,20 @@ printUsageAndExistIfNoTagNameIsSpecified() {
 	fi
 }
 
-checkIfRecentCommitIfFromBumpversion() {
+checkIfAnyRecentCommitsAreFromBumpversion() {
 	RELEASE_VERSION="$(echo "${TAG_NAME}" | tr -d "v" || true)"
 	RECENT_COMMIT_MESSAGE="$(git log --oneline | grep -A 1 -B 1 " → ${RELEASE_VERSION}" || true)"
 	
 	BUMP_VERSION_COMMITS="$(echo "${RECENT_COMMIT_MESSAGE}" | grep -A 1 -B 1 "Bump version:" || true)"
+
 	if [[ ! -z "${BUMP_VERSION_COMMITS}" ]]; then
        echo "~~~ Important to know"
-       echo "You have deleted the tags but the commit messages related to them still linger about."
+       echo "You have deleted the tags but the commit(s) related to them still linger about."
        echo ""
-       echo "Your most recent commit message related to ${TAG_NAME} still exists:"
+       echo "Your most recent commit(s) related to ${TAG_NAME} still exists:"
        echo "${BUMP_VERSION_COMMITS}"
        echo ""; echo "Current HEAD: $(git rev-parse --short HEAD || true)"
-       echo ""; echo "Suggest using the below commands to remove commit message:"
+       echo ""; echo "Suggest using the below commands to remove the commit(s):"
        echo "   git log                             ### list all the commits to examine them"
        echo "   git reset --hard HEAD~1             ### if the last commit is 'Bump version: ....' and you wish to remove it"
        echo ""; echo "   or "; echo ""      
@@ -85,7 +86,7 @@ checkIfRecentCommitIfFromBumpversion() {
        echo "                                       ### [commit-sha] the safe commit point you want your HEAD to point to"
        echo ""; echo "   or "; echo ""      
        echo "   git log                             ### list all the commits to examine them"
-       echo "   git rebase -i HEAD~10.              ### and then interactively remove the bump version related commits"
+       echo "   git rebase -i HEAD~10               ### and then interactively remove the bump version related commits"
 	fi
 }
 
@@ -102,4 +103,4 @@ deleteTag "local repo"  "git tag --delete ${TAG_NAME}" || \
 deleteTag "remote repo" "git push --delete origin ${TAG_NAME}" || \
           (echo "We had an issue deleting ${TAG_NAME} from the remote repo" && true)
 
-checkIfRecentCommitIfFromBumpversion
+checkIfAnyRecentCommitsAreFromBumpversion
