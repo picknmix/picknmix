@@ -77,12 +77,15 @@ checkIfRecentCommitIfFromBumpversion() {
        echo "${BUMP_VERSION_COMMITS}"
        echo ""; echo "Current HEAD: $(git rev-parse --short HEAD || true)"
        echo ""; echo "Suggest using the below commands to remove commit message:"
-       echo "   git log                 ### list all the commits to examine them"
-       echo "   git rebase -i HEAD~10   ### and then interactively remove the bump version related commits"
-       echo ""; echo "   or "; echo ""
-       echo "   git log                 ### list all the commits to examine them"
-       echo "   git reset --hard [commit-sha] ### in case you can do this based on the git commit history"
-       echo "                ### [commit-sha] the safe commit point you want your HEAD to point to"
+       echo "   git log                             ### list all the commits to examine them"
+       echo "   git reset --hard HEAD~1             ### if the last commit is 'Bump version: ....' and you wish to remove it"
+       echo ""; echo "   or "; echo ""      
+       echo "   git log                             ### list all the commits to examine them"
+       echo "   git reset --hard [commit-sha]       ### in case you know from the logs that this is safe to do"
+       echo "                                       ### [commit-sha] the safe commit point you want your HEAD to point to"
+       echo ""; echo "   or "; echo ""      
+       echo "   git log                             ### list all the commits to examine them"
+       echo "   git rebase -i HEAD~10.              ### and then interactively remove the bump version related commits"
 	fi
 }
 
