@@ -53,10 +53,10 @@ showCurrentVersion() {
 runBumpVersion() {
 	if [[ -z "${RELEASE_VERSION}" ]]; then
 		echo ""; echo "Bumping the version of library to the next version"
-		bumpversion --verbose --list patch setup.py
+		bumpversion --verbose --list patch
 	else
 		echo ""; echo "Bumping the version of library to the new version: ${RELEASE_VERSION}"
-		bumpversion --verbose --new-version "${RELEASE_VERSION}" --list patch setup.py
+		bumpversion --verbose --new-version "${RELEASE_VERSION}" --list patch
 	fi
 }
 
