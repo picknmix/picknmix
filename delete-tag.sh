@@ -9,11 +9,11 @@ TAG_NAME=${1:-}
 deleteTag() {
 	TARGET_IN_WORDS=$1
 	TARGET_AS_COMMAND=$2
-	read -p "Do you want to delete ${TAG_NAME} from ${TARGET_IN_WORDS} ([Y|y]es/[N|n]o)? " answer
+	read -r -p "Do you want to delete ${TAG_NAME} from ${TARGET_IN_WORDS} ([Y|y]es/[N|n]o)? " answer
 	answer="$(echo "${answer}" | awk '{print tolower($0)}')"
 	if [[ "${answer}" = "y" ]] || [[ "${answer}" = "yes" ]]; then
 		echo "Deleting tag ${TAG_NAME} from ${TARGET_IN_WORDS}"
-		eval ${TARGET_AS_COMMAND}
+		eval "${TARGET_AS_COMMAND}"
 	else
 		echo "You said 'no', and hence not deleting ${TAG_NAME} from ${TARGET_IN_WORDS}"
 	fi
@@ -42,7 +42,7 @@ checkIfAnyTagsExistAtAll() {
 		exit 0
 	else
 		echo "List of tags on local repo (in sync with the remote repo):"
-		echo ${EXISTING_TAGS}
+		echo "${EXISTING_TAGS}"
 		echo ""
 	fi	
 }

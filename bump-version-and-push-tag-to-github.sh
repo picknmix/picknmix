@@ -35,7 +35,7 @@ checkIfAnyTagsExistAtAll() {
 		echo "We found no tags on your local repo (which means we have none on your remote repo either)"
 	else
 		echo "List of tags on local repo (in sync with the remote repo):"
-		echo ${EXISTING_TAGS}
+		echo "${EXISTING_TAGS}"
 	fi
 	echo "~~~~~~~~~~~~~~~~~~~~~~~"
 }
@@ -56,7 +56,7 @@ bumpVersion() {
 		bumpversion --verbose --list patch setup.py
 	else
 		echo ""; echo "Bumping the version of library to the new version: ${RELEASE_VERSION}"
-		bumpversion --verbose --new-version ${RELEASE_VERSION} --list patch setup.py
+		bumpversion --verbose --new-version "${RELEASE_VERSION}" --list patch setup.py
 	fi
 }
 
@@ -74,7 +74,7 @@ showCreatedTag() {
 
 pushTagToRemoteRepo() {
 	echo ""; echo "Pushing ${CREATED_TAG_NAME} tag to remote"
-	git push origin ${CREATED_TAG_NAME}
+	git push origin "${CREATED_TAG_NAME}"
 }
 
 printOptionalInfo() {
@@ -85,7 +85,7 @@ printOptionalInfo() {
 CREATED_TAG_NAME=""
 askAndBumpVersion() {
 	echo ""
-	read -p "Do you want to bump the version of your library ([Y|y]es/[N|n]o)? " answer
+	read -r -p "Do you want to bump the version of your library ([Y|y]es/[N|n]o)? " answer
 	answer="$(echo "${answer}" | awk '{print tolower($0)}')"
 
 	if [[ "${answer}" = "y" ]] || [[ "${answer}" = "yes" ]]; then
