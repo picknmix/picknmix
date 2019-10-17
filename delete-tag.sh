@@ -94,7 +94,9 @@ printUsageAndExistIfNoTagNameIsSpecified
 exitIfTagNameDoesNotExist
 
 echo "${TAG_NAME} does exist, proceeding further..."
-deleteTag "local repo"  "git tag --delete ${TAG_NAME}"
-deleteTag "remote repo" "git push --delete origin ${TAG_NAME}"
+deleteTag "local repo"  "git tag --delete ${TAG_NAME}" || \
+          (echo "We had an issue deleting ${TAG_NAME} from the local repo" && true)
+deleteTag "remote repo" "git push --delete origin ${TAG_NAME}" || \
+          (echo "We had an issue deleting ${TAG_NAME} from the remote repo" && true)
 
 checkIfRecentCommitIfFromBumpversion

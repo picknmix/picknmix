@@ -25,7 +25,7 @@ checkReleaseVersion() {
 	else
 		echo "Release version provided: ${RELEASE_VERSION}"
 		echo "Tag name to be created: ${TAG_NAME}"
-	fi	
+	fi
 }
 
 checkIfAnyTagsExistAtAll() {
@@ -40,22 +40,28 @@ checkIfAnyTagsExistAtAll() {
 	echo "~~~~~~~~~~~~~~~~~~~~~~~"
 }
 
+getCurrentVersion() {
+	VERSION_STRING="$(grep "version" setup.py | tr -d " ," || true)"
+	VERSION_STRING="$(echo "${VERSION_STRING}" | tr -d "version='" || true)"
+	echo "${VERSION_STRING}"
+}
+
 showCurrentVersion() {
-	echo "Current version of the library is $(grep "version" setup.py | tr -d " ," || true)"
+	echo "Current version of the library is $(getCurrentVersion)"
 }
 
 bumpVersion() {
-	if [[ -z "${RELEASE_VERSION}" ]]; then 
+	if [[ -z "${RELEASE_VERSION}" ]]; then
 		echo ""; echo "Bumping the version of library to the next version"
 		bumpversion --verbose --list patch setup.py
-	else 
+	else
 		echo ""; echo "Bumping the version of library to the new version: ${RELEASE_VERSION}"
 		bumpversion --verbose --new-version ${RELEASE_VERSION} --list patch setup.py
-	fi	
+	fi
 }
 
 showNewVersion() {
-	echo ""; echo "~~~ New version of the library is $(grep "version" setup.py | tr -d " ," || true)"
+	echo ""; echo "~~~ New version of the library is $(getCurrentVersion)"
 }
 
 showRecentCommitMessage() {
@@ -71,13 +77,13 @@ askAndBumpVersion() {
 
 		showNewVersion
 
-		CREATED_TAG_NAME="$(git tag --list | head -n 1)"
+		CREATED_TAG_NAME="v$(getCurrentVersion)"
 		echo ""; echo "~~~ Tag created ${CREATED_TAG_NAME}"
 
 		showRecentCommitMessage
 
 		echo ""; echo "Pushing ${CREATED_TAG_NAME} tag to remote"
-		git push origin ${CREATED_TAG_NAME}	
+		git push origin ${CREATED_TAG_NAME}
 
 		echo ""; echo "(Optional info) You can delete the ${CREATED_TAG_NAME} tag from both your local and remote repos using the below command:"
 		echo "./delete-tag.sh ${CREATED_TAG_NAME}"
