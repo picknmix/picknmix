@@ -149,7 +149,7 @@ class TestLayer:
         curLayer2 = curLayer.copy()
         gotError = False
         try:
-            curLayer2.predict([1, 2])
+            curLayer2.predict(np.array([[3, 5]]))
         except(NotFittedError):
             gotError = True
         assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"
@@ -163,7 +163,7 @@ class TestLayer:
         curLayer2 = curLayer.copy()
         gotError = False
         try:
-            curLayer2.predict([1,2])
+            curLayer2.predict(np.array([[3, 5]]))
         except(NotFittedError):
             gotError = True
 

@@ -9,7 +9,7 @@ while Stack combine Layers to create a stacking model"""
 from copy import deepcopy
 import numpy as np
 import warnings
-import sklearn
+import importlib
 
 
 class Layer:
@@ -139,6 +139,22 @@ class Layer:
                 result = np.concatenate((result, temp_result), axis=1)
         return result
 
+    def _isSklearnEstimator(self, estimator):
+        """ Checks whether the given object is an estimator of sklearn-library (Code from sklearn.base.clone())
+        """
+        return hasattr(estimator, 'get_params') and not isinstance(estimator, type)
+
+    def _cloneObject(self, estimator, moduleObject=None):
+        """Abstract method for cloning a presumed estimator object
+        """
+        copyEstimator = None
+        if estimator is not None:
+            if self._isSklearnEstimator(estimator) and moduleObject is not None and "sklearn" in moduleObject:
+                cloneMethod = getattr(moduleObject["sklearn"], "clone") 
+                copyEstimator = cloneMethod(estimator)
+            else: copyEstimator = deepcopy(estimator)
+        return copyEstimator
+
     def copy(self):
         """Copies the Layer's shape as it has not been trained before
         Returns
@@ -147,11 +163,17 @@ class Layer:
         """
         copyPreprocessors = []
         copyModels = []
+        try:
+            #package is defined here once and passed to _cloneObject. When further modules are required, further imports will be necessary
+            moduleObject = {"sklearn": importlib.import_module("sklearn.base")}
+        except(ImportError):
+            moduleObject = None
         for preprocessor in self.preprocessors:
-            copyPrep = sklearn.base.clone(preprocessor) if preprocessor is not None else None
+            copyPrep = self._cloneObject(preprocessor, moduleObject=moduleObject)
             copyPreprocessors.append(copyPrep)
+
         for model in self.models:
-            copyModel = sklearn.base.clone(model)
+            copyModel = self._cloneObject(model, moduleObject=moduleObject)
             copyModels.append(copyModel)
         return Layer(models=copyModels, preprocessors=copyPreprocessors)
 
