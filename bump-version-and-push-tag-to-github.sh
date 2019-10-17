@@ -50,7 +50,7 @@ showCurrentVersion() {
 	echo "Current version of the library is $(getCurrentVersion)"
 }
 
-bumpVersion() {
+runBumpVersion() {
 	if [[ -z "${RELEASE_VERSION}" ]]; then
 		echo ""; echo "Bumping the version of library to the next version"
 		bumpversion --verbose --list patch setup.py
@@ -83,31 +83,24 @@ printOptionalInfo() {
 }
 
 CREATED_TAG_NAME=""
-askAndBumpVersion() {
-	echo ""
-	read -r -p "Do you want to bump the version of your library ([Y|y]es/[N|n]o)? " answer
-	answer="$(echo "${answer}" | awk '{print tolower($0)}')"
+run() {
+	runBumpVersion
 
-	if [[ "${answer}" = "y" ]] || [[ "${answer}" = "yes" ]]; then
-		bumpVersion
+	showNewVersion
 
-		showNewVersion
+	CREATED_TAG_NAME="v$(getCurrentVersion)"
+	
+	showCreatedTag
 
-		CREATED_TAG_NAME="v$(getCurrentVersion)"
-		
-		showCreatedTag
+	showRecentCommitMessage
 
-		showRecentCommitMessage
+	pushTagToRemoteRepo
 
-		pushTagToRemoteRepo
+	printOptionalInfo
 
-		printOptionalInfo
-	else
-		echo ""; echo "You said 'no', and hence NOT bumping version of library (version stays unchanged)."
-	fi
 }
 
 checkReleaseVersion
 checkIfAnyTagsExistAtAll
 showCurrentVersion
-askAndBumpVersion
+run
