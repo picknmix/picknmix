@@ -11,11 +11,11 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['scikit-learn>=0.21.2']
+requirements = []
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest', ]
+test_requirements = ['pytest', 'scikit-learn>=0.21.2']
 
 setup(
     author="Cheuk Ting Ho",
