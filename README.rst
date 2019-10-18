@@ -19,6 +19,9 @@ Pick n Mix
         :target: https://opensource.org/licenses/MIT
         :alt: License badge
 
+.. image:: https://codecov.io/gh/picknmix/picknmix/branch/master/graph/badge.svg
+          :target: https://codecov.io/gh/picknmix/picknmix
+
 
 
 
