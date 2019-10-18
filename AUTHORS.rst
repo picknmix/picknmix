@@ -17,3 +17,4 @@ Contributors
 * Mani Sarkar <https://github.com/neomatrix369>
 * Przemyslaw Pietras <https://github.com/destag>
 * Ignacio Pacheco <https://github.com/ipacheco-uy>
+* TenebraeX8 <https://github.com/TenebraeX8>

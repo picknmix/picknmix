@@ -4,6 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold
+from sklearn.exceptions import NotFittedError
 from picknmix import Layer, Stack
 
 layer_width2_reg = Layer([LinearRegression(), LinearRegression()],
@@ -96,3 +97,37 @@ class TestStack:
         result = model.predict(np.array([[3, 5],[3, 5]]))
         assert result.shape == (2,)
         assert np.allclose(result, np.array([16, 16]))
+
+    def test_stack_copy_function_only_model(self):
+        first_layer = Layer([LinearRegression(), LogisticRegression()])
+        second_layer = Layer([LinearRegression()])
+        model = Stack([first_layer, second_layer])
+
+        X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+        y = np.dot(X, np.array([1, 2])) + 3
+        model.fit(X, y)
+        model2 = model.copy()
+        gotError = False
+        try:
+            model2.predict([1, 2])
+        except(NotFittedError):
+            gotError = True
+
+        assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"
+
+    def test_stack_copy_function_model_and_preprocessor(self):
+        first_layer = Layer(models=[LogisticRegression(), LinearRegression()], preprocessors=[MinMaxScaler(), None])
+        second_layer = Layer([LinearRegression()], preprocessors=[MinMaxScaler()])
+        model = Stack([first_layer, second_layer])
+
+        X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+        y = np.dot(X, np.array([1, 2])) + 3
+        model.fit(X, y)
+        model2 = model.copy()
+        gotError = False
+        try:
+            model2.predict([1,2])
+        except(NotFittedError):
+            gotError = True
+
+        assert gotError, "Model failed the copy Test: When copying, a deep copy was produced"

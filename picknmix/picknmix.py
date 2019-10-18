@@ -9,6 +9,7 @@ while Stack combine Layers to create a stacking model"""
 from copy import deepcopy
 import numpy as np
 import warnings
+import importlib
 
 
 class Layer:
@@ -138,6 +139,45 @@ class Layer:
                 result = np.concatenate((result, temp_result), axis=1)
         return result
 
+    def _isSklearnEstimator(self, estimator):
+        """ Checks whether the given object is an estimator of sklearn-library (Code from sklearn.base.clone())
+        """
+        return hasattr(estimator, 'get_params') and not isinstance(estimator, type)
+
+    def _cloneObject(self, estimator, moduleObject=None):
+        """Abstract method for cloning a presumed estimator object
+        """
+        copyEstimator = None
+        if estimator is not None:
+            if self._isSklearnEstimator(estimator) and moduleObject is not None and "sklearn" in moduleObject:
+                cloneMethod = getattr(moduleObject["sklearn"], "clone") 
+                copyEstimator = cloneMethod(estimator)
+            else: copyEstimator = deepcopy(estimator)
+        return copyEstimator
+
+    def copy(self):
+        """Copies the Layer's shape as it has not been trained before
+        Returns
+        =======
+        the copy of the Layer
+        """
+        copyPreprocessors = []
+        copyModels = []
+        try:
+            #package is defined here once and passed to _cloneObject. When further modules are required, further imports will be necessary
+            moduleObject = {"sklearn": importlib.import_module("sklearn.base")}
+        except(ImportError):
+            moduleObject = None
+        for preprocessor in self.preprocessors:
+            copyPrep = self._cloneObject(preprocessor, moduleObject=moduleObject)
+            copyPreprocessors.append(copyPrep)
+
+        for model in self.models:
+            copyModel = self._cloneObject(model, moduleObject=moduleObject)
+            copyModels.append(copyModel)
+        return Layer(models=copyModels, preprocessors=copyPreprocessors)
+
+
 
 class Stack:
     def __init__(self, layers, folds=None):
@@ -233,6 +273,16 @@ class Stack:
             X_new = X_new.flatten()
         return X_new
 
+    def copy(self):
+        """Copies the Stack's shape as it has not been trained before
+        Returns
+        =======
+        the copy of the Stack
+        """
+        copyLayers = []
+        for idx in range(self.depth):
+            copyLayers.append(self.layers[idx].copy())
+        return Stack(layers=copyLayers)
 
 def _method_checker(obj, method_name):
     return method_name in dir(obj)
