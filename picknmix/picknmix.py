@@ -140,7 +140,8 @@ class Layer:
         return result
 
     def _isSklearnEstimator(self, estimator):
-        """ Checks whether the given object is an estimator of sklearn-library (Code from sklearn.base.clone())
+        """ Checks whether the given object is an estimator of sklearn-library
+        (Code from sklearn.base.clone())
         """
         return hasattr(estimator, 'get_params') and not isinstance(estimator, type)
 
@@ -149,10 +150,12 @@ class Layer:
         """
         copyEstimator = None
         if estimator is not None:
-            if self._isSklearnEstimator(estimator) and moduleObject is not None and "sklearn" in moduleObject:
-                cloneMethod = getattr(moduleObject["sklearn"], "clone") 
+            if self._isSklearnEstimator(estimator) and \
+               moduleObject is not None and "sklearn" in moduleObject:
+                cloneMethod = getattr(moduleObject["sklearn"], "clone")
                 copyEstimator = cloneMethod(estimator)
-            else: copyEstimator = deepcopy(estimator)
+            else:
+                copyEstimator = deepcopy(estimator)
         return copyEstimator
 
     def copy(self):
@@ -164,7 +167,8 @@ class Layer:
         copyPreprocessors = []
         copyModels = []
         try:
-            #package is defined here once and passed to _cloneObject. When further modules are required, further imports will be necessary
+            #package is defined here once and passed to _cloneObject.
+            #When further modules are required, further imports will be necessary
             moduleObject = {"sklearn": importlib.import_module("sklearn.base")}
         except(ImportError):
             moduleObject = None
@@ -176,7 +180,6 @@ class Layer:
             copyModel = self._cloneObject(model, moduleObject=moduleObject)
             copyModels.append(copyModel)
         return Layer(models=copyModels, preprocessors=copyPreprocessors)
-
 
 
 class Stack:
@@ -283,6 +286,7 @@ class Stack:
         for idx in range(self.depth):
             copyLayers.append(self.layers[idx].copy())
         return Stack(layers=copyLayers)
+
 
 def _method_checker(obj, method_name):
     return method_name in dir(obj)
