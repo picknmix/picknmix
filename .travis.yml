@@ -4,16 +4,10 @@ python:
 - 3.7
 - 3.6
 - 3.5
-before_install: | 
-  export CODE_CHANGES="$(./codeChangesAreMade.sh)"
-  CODE_CHANGES=${CODE_CHANGES:-}
-  echo "CODE_CHANGES: ${CODE_CHANGES}"
-  if [[ "${CODE_CHANGES}" = "false" ]]; then
-     echo "We have not made code related changes in this PR/branch, hence exiting gracefully now. No TravisCI build will be triggered for this PR/branch.";
-     exit 0;
-  fi
 install: pip install -U tox-travis
-script: ./runOnCICD.sh
+script: tox
+after_success:
+  - tox -e coverage,codecov
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
