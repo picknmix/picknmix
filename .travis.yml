@@ -4,7 +4,7 @@ python:
 - 3.7
 - 3.6
 - 3.5
-before_install: | 
+before_install: |
   export CODE_CHANGES="$(./codeChangesAreMade.sh)"
   CODE_CHANGES=${CODE_CHANGES:-}
   echo "CODE_CHANGES: ${CODE_CHANGES}"
@@ -13,7 +13,9 @@ before_install: |
      exit 0;
   fi
 install: pip install -U tox-travis
-script: ./runOnCICD.sh
+script: tox
+after_success:
+  - tox -e coverage,codecov
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
