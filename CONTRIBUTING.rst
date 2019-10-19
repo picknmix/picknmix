@@ -1,3 +1,5 @@
+.. contents:: :local:
+
 .. highlight:: shell
 
 ============
@@ -125,14 +127,6 @@ Before you submit a pull request, check that it meets these guidelines:
   * [Doc] for documentation
   * [BUG] for bug fix
   * [WIP] for work in progress PR
-
-Tips
-----
-
-To run a subset of tests::
-
-$ pytest tests.test_picknmix
-
 
 Deploying
 ---------
