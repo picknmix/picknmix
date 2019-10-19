@@ -1,5 +1,22 @@
 .. highlight:: shell
 
+========================================================================================================================
+                                                        Contents 
+
+1. Contributors
+2. Type of Contributions
+   2.1 Report Bug
+   2.2 Fix Bug
+   2.3 Implement Features
+   2.4 Write Documentation
+   2.5 Write Tests
+   2.6 Submit Feedback
+3. Getting started
+4. Pull Request Guidelines
+5. Deployement help 
+
+========================================================================================================================
+
 ============
 Contributing
 ============
@@ -125,13 +142,6 @@ Before you submit a pull request, check that it meets these guidelines:
   * [Doc] for documentation
   * [BUG] for bug fix
   * [WIP] for work in progress PR
-
-Tips
-----
-
-To run a subset of tests::
-
-$ pytest tests.test_picknmix
 
 
 Deploying
