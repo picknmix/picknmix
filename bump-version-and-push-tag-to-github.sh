@@ -4,9 +4,6 @@ set -e
 set -u
 set -o pipefail
 
-RELEASE_VERSION="${1:-}"
-TAG_NAME="v${RELEASE_VERSION}"
-
 printUsageText() {
 	echo "It's optional to specify a release version, if you do, below is the format"
 	echo ""
@@ -68,6 +65,18 @@ runBumpVersion() {
 	fi
 }
 
+postRunBumpVersion() {
+    exitCode=$1
+
+    if [[ ${exitCode} -ne 0 ]]; then
+       echo "Error occurred while running bumpversion, aborting..."
+	   displayBumpversionRunOutput
+	   exit ${exitCode}
+	fi
+
+	displayBumpversionRunOutput
+}
+
 showNewVersion() {
 	echo ""; echo "~~~ New version of the library is $(getCurrentVersion)"
 }
@@ -90,17 +99,24 @@ printOptionalInfo() {
 	echo "./delete-tag.sh ${CREATED_TAG_NAME}"
 }
 
-CREATED_TAG_NAME=""
-run() {
-    BUMPVERSION_VERBOSE_OUTPUT_FILE=".bumpversion-verbose-output.txt"
-	runBumpVersion &> "${BUMPVERSION_VERBOSE_OUTPUT_FILE}"
-	echo ""; echo "For brevity, the verbose output from bumpversion has been saved into ${BUMPVERSION_VERBOSE_OUTPUT_FILE}"
+displayBumpversionRunOutput() {
 	### TravisCI (like other CI services) has a default environment variable called CI
 	### indicates we are running on a CI service and not local machine
 	### See https://docs.travis-ci.com/user/environment-variables/#default-environment-variables
     if [[ "${CI:-}" = "true" ]]; then
        cat "${BUMPVERSION_VERBOSE_OUTPUT_FILE}"
+    else
+       echo ""; echo "For brevity, the verbose output from bumpversion can be found at ${BUMPVERSION_VERBOSE_OUTPUT_FILE}"
     fi
+}
+
+run() {
+    exitCode=0
+    runBumpVersion                                \
+	      &> "${BUMPVERSION_VERBOSE_OUTPUT_FILE}" \
+	      || exitCode=$? && true
+
+    postRunBumpVersion "${exitCode}"
 
 	showNewVersion
 
@@ -115,6 +131,12 @@ run() {
 	printOptionalInfo
 }
 
+RELEASE_VERSION="${1:-}"
+TAG_NAME="v${RELEASE_VERSION}"
+CREATED_TAG_NAME=""
+BUMPVERSION_VERBOSE_OUTPUT_FILE=".bumpversion-verbose-output.txt"
+
+rm -fr "${BUMPVERSION_VERBOSE_OUTPUT_FILE}"
 checkIfThereAreNoUncommittedChanges
 checkReleaseVersion
 checkIfAnyTagsExistAtAll
