@@ -8,7 +8,6 @@ Welcome to Pick n Mix's documentation!
    readme
    installation
    usage
-   modules
    contributing
    authors
    history
