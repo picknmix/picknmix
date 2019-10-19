@@ -124,9 +124,10 @@ Before you submit a pull request, check that it meets these guidelines:
    https://travis-ci.org/Cheukting/picknmix/pull_requests
    and make sure that the tests pass for all supported Python versions.
 4. Use this title convention::
-  * [Doc] for documentation
-  * [BUG] for bug fix
-  * [WIP] for work in progress PR
+
+   * [Doc] for documentation
+   * [BUG] for bug fix
+   * [WIP] for work in progress PR
 
 Deploying
 ---------
