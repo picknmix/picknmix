@@ -5,6 +5,29 @@ set -u
 set -o pipefail
 
 TAG_NAME=${1:-}
+GIT_COMMIT_SUGGESTIONS_FILE=.git-commits-removal-suggestions.txt
+
+makeGitSuggestions() {
+    cat > ${GIT_COMMIT_SUGGESTIONS_FILE} << EOF
+       
+Below are some suggestions to remove the commit(s) created by bumpversion:
+
+  git log                             ### list all the commits to examine them
+  git reset --hard HEAD~1             ### if the last commit is 'Bump version: ....' and you wish to remove it
+
+       or
+
+  git log                             ### list all the commits to examine them
+  git reset --hard [commit-sha]       ### in case you know from the logs that this is safe to do
+                                      ### [commit-sha] the safe commit point you want your HEAD to point to
+
+       or
+
+  git log                             ### list all the commits to examine them
+  git rebase -i HEAD~10               ### and then interactively remove the bump version related commits
+
+EOF
+}
 
 deleteTag() {
 	TARGET_IN_WORDS=$1
@@ -77,16 +100,9 @@ checkIfAnyRecentCommitsAreFromBumpversion() {
        echo "Your most recent commit(s) related to ${TAG_NAME} still exists:"
        echo "${BUMP_VERSION_COMMITS}"
        echo ""; echo "Current HEAD: $(git rev-parse --short HEAD || true)"
-       echo ""; echo "Suggest using the below commands to remove the commit(s):"
-       echo "   git log                             ### list all the commits to examine them"
-       echo "   git reset --hard HEAD~1             ### if the last commit is 'Bump version: ....' and you wish to remove it"
-       echo ""; echo "   or "; echo ""      
-       echo "   git log                             ### list all the commits to examine them"
-       echo "   git reset --hard [commit-sha]       ### in case you know from the logs that this is safe to do"
-       echo "                                       ### [commit-sha] the safe commit point you want your HEAD to point to"
-       echo ""; echo "   or "; echo ""      
-       echo "   git log                             ### list all the commits to examine them"
-       echo "   git rebase -i HEAD~10               ### and then interactively remove the bump version related commits"
+
+       makeGitSuggestions
+       echo ""; echo "Suggestions on how to remove git commits can be found in ${GIT_COMMIT_SUGGESTIONS_FILE} in the current folder"
 	fi
 }
 
