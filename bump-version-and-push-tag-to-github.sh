@@ -4,17 +4,6 @@ set -e
 set -u
 set -o pipefail
 
-printUsageText() {
-	echo "It's optional to specify a release version, if you do, below is the format"
-	echo ""
-	echo "Usage:"
-	echo "    $0 [new release version]"
-	echo "  for e.g.:"
-	echo "    $0 0.1.2"
-	echo ""
-	echo "In the absence of the release version supplied via CLI args, we will use the information in the .bumpversion.cfg file"
-}
-
 checkIfThereAreNoUncommittedChanges() {
     UNCOMMITTED_CHANGES="$(git diff --name-status || true)"
 
@@ -70,8 +59,8 @@ postRunBumpVersion() {
 
     if [[ ${exitCode} -ne 0 ]]; then
        echo "Error occurred while running bumpversion, aborting..."
-	   displayBumpversionRunOutput
-	   exit ${exitCode}
+       displayBumpversionRunOutput
+       exit ${exitCode}
 	fi
 
 	displayBumpversionRunOutput
