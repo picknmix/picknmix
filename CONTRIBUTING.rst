@@ -44,8 +44,7 @@ articles, and such.
 
 Note that you can skip Travis CI testing if your commit does not include
 any code changes. In that case, just include ``[skip CI]`` in the commit
-message, as in ``git commit -m "Added docs for feature one [skip CI]"``.
-See the `Travis documentation <https://docs.travis-ci.com/user/customizing-the-build/#skipping-a-build>`
+message.See the `Travis documentation <https://docs.travis-ci.com/user/customizing-the-build/#skipping-a-build>`_
 for more details.
 
 Write Tests
