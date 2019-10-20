@@ -44,6 +44,9 @@ Pick n Mix could always use more documentation, whether as part of the
 official Pick n Mix docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
+if no code change, CI testing is not required and they can write [skip CI] in the commit message to skip the time taken for CI builds.
+You can referer to Travis for more info
+
 Write Tests
 ~~~~~~~~~~~~~~~~~~~
 
