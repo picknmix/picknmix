@@ -19,3 +19,4 @@ Contributors
 * Ignacio Pacheco <https://github.com/ipacheco-uy>
 * TenebraeX8 <https://github.com/TenebraeX8>
 * Nasanos <https://github.com/nasanos>
+* Faraz Fesharaki <farazfesharaki2000@yahoo.com>
