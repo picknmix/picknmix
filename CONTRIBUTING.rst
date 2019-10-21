@@ -44,6 +44,11 @@ Pick n Mix could always use more documentation, whether as part of the
 official Pick n Mix docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
+Note that you can skip Travis CI testing if your commit does not include
+any code changes. In that case, just include ``[skip CI]`` in the commit
+message. See the `Travis documentation <https://docs.travis-ci.com/user/customizing-the-build/#skipping-a-build>`_
+for more details.
+
 Write Tests
 ~~~~~~~~~~~~~~~~~~~
 
