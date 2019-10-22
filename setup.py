@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = []
+requirements = ["numpy"]
 extras_requirements = {'test': ['pytest', 'scikit-learn>=0.21.2']}
 
 setup(
