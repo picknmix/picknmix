@@ -12,10 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = []
-
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest', 'scikit-learn>=0.21.2']
+extras_requirements = {'test': ['pytest', 'scikit-learn>=0.21.2']}
 
 setup(
     author="Cheuk Ting Ho",
@@ -43,9 +40,7 @@ setup(
     keywords='picknmix',
     name='picknmix',
     packages=find_packages(include=['picknmix']),
-    setup_requires=setup_requirements,
-    test_suite='tests',
-    tests_require=test_requirements,
+    extras_require=extras_requirements,
     url='https://github.com/Cheukting/picknmix',
     version='0.1.3',
     python_requires=">=3.5",
