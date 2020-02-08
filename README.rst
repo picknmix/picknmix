@@ -1,4 +1,4 @@
-.. image:: https://github.com/Cheukting/picknmix/raw/master/logo/picknmix_logo.png
+.. image:: https://github.com/picknmix/picknmix/raw/master/logo/picknmix_logo.png
 
 ==========
 Pick n Mix
@@ -80,13 +80,13 @@ From sources
 
 ::
 
-    $ git clone git://github.com/Cheukting/picknmix
+    $ git clone git://github.com/picknmix/picknmix
 
-+ Or download the `tarball <https://github.com/Cheukting/picknmix/tarball/master>`_:
++ Or download the `tarball <https://github.com/picknmix/picknmix/tarball/master>`_:
 
 ::
 
-    $ curl  -OL https://github.com/Cheukting/picknmix/tarball/master
+    $ curl  -OL https://github.com/picknmix/picknmix/tarball/master
 
 + Once you have a copy of the source, you can install it with:
 
