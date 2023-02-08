@@ -17,3 +17,4 @@ pytest==3.9.2
 pluggy==0.13.0
 
 codecov==2.0.15
+numpy>=1.22.2 # not directly required, pinned by Snyk to avoid a vulnerability
