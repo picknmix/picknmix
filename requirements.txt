@@ -5,15 +5,20 @@ watchdog==0.9.0
 flake8==3.7.8
 tox==3.13.2
 coverage==4.5.3
-Sphinx==2.1.2
+Sphinx==3.3.0
 twine==1.13.0
 
 pytest-runner==5.1
 
-scikit-learn==0.21.2
+scikit-learn==1.5.0
 
 pytest-cov==2.1.0
 pytest==3.9.2
 pluggy==0.13.0
 
 codecov==2.0.15
+numpy>=1.22.2 # not directly required, pinned by Snyk to avoid a vulnerability
+requests>=2.32.2 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
